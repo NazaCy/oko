@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Draw a Square on Google Maps</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxf1YdgwfQXK6chJRRGKo6aC2iVr6pGPk&libraries=drawing"></script>
+    <style>
+      #map {
+        
+        height: 500px;
+        width: 500px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+        let map;
+        let rectangle;
+        let drawingManager;
+        let selectedArea = []; // To store the corners of the rectangle
+
+        function initMap() {
+            // Create the map
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 41.870072, lng: 12.44693 }, // Example: Rome, Italy
+                zoom: 13,
+            });
+
+            // Create the drawing manager for adding shapes to the map
+            drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
+                rectangleOptions: {
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.35,
+                    strokeWeight: 2,
+                    strokeColor: "#FF0000",
+                    clickable: true,
+                    editable: true,
+                    draggable: true,
+                },
+            });
+
+            // Activate the drawing manager on the map
+            drawingManager.setMap(map);
+
+            // Add listener for when a rectangle is drawn
+            google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+                // If there was an existing rectangle, remove it
+                if (rectangle) {
+                    rectangle.setMap(null);
+                }
+
+                // The new rectangle created
+                rectangle = event.overlay;
+
+                // Get the bounds of the rectangle
+                const bounds = rectangle.getBounds();
+                const northEast = bounds.getNorthEast();
+                const southWest = bounds.getSouthWest();
+
+                // Store the coordinates of the rectangle
+                selectedArea = [
+                    [southWest.lng(), southWest.lat()], // Bottom-left corner
+                    [northEast.lng(), northEast.lat()]  // Top-right corner
+                ];
+
+                // Log the rectangle coordinates to the console
+                console.log("Rectangle coordinates:", selectedArea);
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>
