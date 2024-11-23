@@ -89,14 +89,9 @@ function setupSubmitButton() {
 function requestToken() {
     const myHeaders = new Headers();
     myHeaders.append("content-type", "application/x-www-form-urlencoded");
-    myHeaders.append("User-Agent", "PostmanRuntime/7.42.0");
+    
+    // Remove unnecessary headers
     myHeaders.append("Accept", "*/*");
-    myHeaders.append("Cache-Control", "no-cache");
-    myHeaders.append("Postman-Token", "64653592-41df-4412-96f3-95c199556938");
-    myHeaders.append("Host", "services.sentinel-hub.com");
-    myHeaders.append("Accept-Encoding", "gzip, deflate, br");
-    myHeaders.append("Connection", "keep-alive");
-    myHeaders.append("Content-Length", "123");
 
     const urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "client_credentials");
